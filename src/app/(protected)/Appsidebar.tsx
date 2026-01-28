@@ -12,6 +12,7 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
+import useProject from "@/hooks/use-Project";
 import { cn } from "@/lib/utils";
 import { url } from "inspector";
 import {
@@ -25,37 +26,27 @@ import {
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
+const item = [
+  {
+    title: "Dashboard",
+    url: "/dashboard",
+    icon: LayoutDashboard,
+  },
 
+  {
+    title: "Q&A",
+    url: "/qa",
+    icon: Bot,
+  },
+  {
+    title: "Billing",
+    url: "/billing",
+    icon: CreditCard,
+  },
+];
 const Appsidebar = () => {
-  const item = [
-    {
-      title: "Dashboard",
-      url: "/dashboard",
-      icon: LayoutDashboard,
-    },
+  const { projects, projectId, setProjectId } = useProject();
 
-    {
-      title: "Q&A",
-      url: "/qa",
-      icon: Bot,
-    },
-    {
-      title: "Billing",
-      url: "/billing",
-      icon: CreditCard,
-    },
-  ];
-  const project = [
-    {
-      name: "Project 1",
-    },
-    {
-      name: "Project 1",
-    },
-    {
-      name: "Project 1",
-    },
-  ];
   const { open } = useSidebar(); //will use for logo name
   const pathname = usePathname();
   return (
@@ -91,16 +82,20 @@ const Appsidebar = () => {
           <SidebarGroupLabel>Your Project</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {project.map((it, index) => {
+              {projects?.map((it, index) => {
                 return (
                   <SidebarMenuItem key={index}>
                     <SidebarMenuButton asChild>
-                      <div>
+                      <div
+                        onClick={() => {
+                          setProjectId(it.id);
+                        }}
+                      >
                         <div
                           className={cn(
                             "text-primary flex size-6 items-center justify-center rounded-sm border bg-white text-sm",
                             {
-                              "bg-primary text-white": true,
+                              "bg-primary text-white": it.id === projectId,
                             },
                           )}
                         >
