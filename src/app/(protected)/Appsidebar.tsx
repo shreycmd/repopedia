@@ -112,14 +112,17 @@ const Appsidebar = () => {
                   </SidebarMenuItem>
                 );
               })}
-              <SidebarMenuItem>
-                <div className="h-2"> </div>
-                <Link href="/create">
-                  <Button variant="outline" className="w-fit">
-                    <Plus></Plus> Create Project
-                  </Button>
-                </Link>
-              </SidebarMenuItem>
+
+              <div className="h-2"> </div>
+              {open && (
+                <SidebarMenuItem>
+                  <Link href="/create">
+                    <Button variant="outline" className="w-fit">
+                      <Plus></Plus> Create Project
+                    </Button>
+                  </Link>
+                </SidebarMenuItem>
+              )}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
