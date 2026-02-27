@@ -87,7 +87,7 @@ export async function aisummarizeCommits(diff: string) {
   Most commits will have fewer comments than this example.
   Do NOT include filenames unless necessary.
 
-  Please summarize the following diff:
+  Please summarize the following diff in note more then 100 words:
   ${diff}
   `,
           },
