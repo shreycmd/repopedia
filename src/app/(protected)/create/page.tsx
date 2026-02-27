@@ -12,6 +12,7 @@ type FormInput = {
   repoURL: string;
   ProjectName: string;
 };
+import lg from "public/logo.png";
 const CreateProject = () => {
   const refetch = useRefetch();
   const createproject = api.project.createProject.useMutation();
@@ -38,7 +39,7 @@ const CreateProject = () => {
   }
   return (
     <div className="flex h-full items-center justify-center gap-12">
-      {/* <Image alt="" src="" className="h-56 w-auto" /> */}
+      <Image alt="logo" src={lg} className="h-56 w-auto" />
       <div>
         <div>
           <h1 className="text-2xl font-semibold"> Link Your Repository</h1>

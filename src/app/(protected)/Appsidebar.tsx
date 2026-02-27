@@ -23,6 +23,8 @@ import {
   Plus,
   Presentation,
 } from "lucide-react";
+import logo from "public/tex.png";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
@@ -38,11 +40,6 @@ const item = [
     url: "/qa",
     icon: Bot,
   },
-  {
-    title: "Billing",
-    url: "/billing",
-    icon: CreditCard,
-  },
 ];
 const Appsidebar = () => {
   const { projects, projectId, setProjectId } = useProject();
@@ -51,7 +48,11 @@ const Appsidebar = () => {
   const pathname = usePathname();
   return (
     <Sidebar collapsible="icon" variant="floating">
-      <SidebarHeader>logo</SidebarHeader>
+      <SidebarHeader>
+        <div className="flex items-center gap-2">
+          <Image src={logo} alt="logo" width={150} height={150} />
+        </div>
+      </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupLabel>Application</SidebarGroupLabel>
@@ -63,9 +64,12 @@ const Appsidebar = () => {
                     <SidebarMenuButton asChild>
                       <Link
                         href={it.url}
-                        className={cn({
-                          "!bg-primary !text-white": pathname === it.url,
-                        })}
+                        className={cn(
+                          {
+                            "!bg-primary !text-white": pathname === it.url,
+                          },
+                          "list-none",
+                        )}
                       >
                         <it.icon />
                         <span> {it.title}</span>
@@ -112,7 +116,7 @@ const Appsidebar = () => {
               {open && (
                 <SidebarMenuItem>
                   <Link href="/create">
-                    <Button variant="outline" className="w-fit">
+                    <Button variant="outline" size="sm" className="w-fit">
                       <Plus></Plus> Create Project
                     </Button>
                   </Link>

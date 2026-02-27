@@ -1,13 +1,14 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 generator client {
-    provider = "prisma-client-js"
-    output   = "../generated/prisma"
+    provider        = "prisma-client-js"
+    previewFeatures = ["postgresqlExtensions"]
 }
 
 datasource db {
-    provider = "postgresql"
-    url      = env("DATABASE_URL")
+    provider   = "postgresql"
+    url        = env("DATABASE_URL")
+    extensions = [vector]
 }
 
 model Post {
@@ -17,6 +18,29 @@ model Post {
     updatedAt DateTime @updatedAt
 
     @@index([name])
+}
+
+model Question {
+    id             String   @id @default(cuid())
+    createdAt      DateTime @default(now())
+    updatedAt      DateTime @updatedAt
+    question       String
+    answer         String
+    fileReferences Json?
+    projectId      String
+    project        Project  @relation(fields: [projectId], references: [id])
+    userId         String
+    user           User     @relation(fields: [userId], references: [id])
+}
+
+model SourceCodeEmbedding {
+    id               String                      @id @default(cuid())
+    summaryEmbedding Unsupported("vector(768)")?
+    sourceCode       String
+    fileName         String
+    summary          String
+    projectId        String
+    project          Project                     @relation(fields: [projectId], references: [id])
 }
 
 model User {
@@ -29,16 +53,20 @@ model User {
     createdAt      DateTime        @default(now())
     updatedAt      DateTime        @updatedAt
     usertoProjects UsertoProject[]
+    questions      Question[]
 }
 
 model Project {
-    id             String          @id @default(uuid())
-    createdAt      DateTime        @default(now())
-    updatedAt      DateTime        @default(now())
-    name           String
-    githubUrl      String
-    deletedAt      DateTime?
-    usertoProjects UsertoProject[]
+    id                   String                @id @default(uuid())
+    createdAt            DateTime              @default(now())
+    updatedAt            DateTime              @default(now())
+    name                 String
+    githubUrl            String
+    deletedAt            DateTime?
+    usertoProjects       UsertoProject[]
+    commits              Commit[]
+    sourceCodeEmbeddings SourceCodeEmbedding[]
+    questions            Question[]
 }
 
 model UsertoProject {
@@ -51,4 +79,20 @@ model UsertoProject {
     project   Project  @relation(fields: [projectId], references: [id])
 
     @@unique([userId, projectId])
+}
+
+model Commit {
+    id        String   @id @default(cuid())
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    projectId             String
+    project               Project  @relation(fields: [projectId], references: [id])
+    commitMessage         String
+    commitHash            String
+    commitAuthor          String
+    commitAuthorAvatarUrl String
+    commitDate            DateTime
+    //ai summary
+    summary               String
 }
